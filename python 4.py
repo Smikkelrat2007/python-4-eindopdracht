@@ -43,32 +43,39 @@ def nieuwewoordenlijstmaken():
     lijstvanwoordlijsten.write("\n")
   lijstvanwoordlijsten.write(naamlijst)
   lijstvanwoordlijsten.close()
+  leegscherm()
   f = open(naamlijst, "a")
   printtop()
-  woordje = input(printregel('wat is het woordje: '))
-  betekenis = input(printregel('wat is de betekenis: '))
+  printregel('wat is het woordje: ')
   printbottom()
+  woordje = input("")
+  printtop()
+  printregel('wat is de betekenis: ')
+  printbottom()
+  betekenis = input("")
   f.write(woordje + " - " + betekenis)
   f.close()
-  if input('nog een woordje? y/n') == "y":
-    doorgaan = True
-  else:
-    doorgaan = False
-  while doorgaan:
+  doorgaan = input('nog een woordje? y/n')
+  while doorgaan != "n":
+    leegscherm()
     f = open(naamlijst, "a")
     printtop()
-    woordje = input(printregel('wat is het woordje: '))
-    betekenis = input(printregel('wat is de betekenis: '))
+    printregel('wat is het woordje: ')
     printbottom()
+    woordje = input("")
+    printtop()
+    printregel('wat is de betekenis: ')
+    printbottom()
+    betekenis = input("")
     f.write("\n")
     f.write(woordje + " - " + betekenis)
     f.close()
-    if input('nog een woordje? y/n') == "y":
-      doorgaan = True
-    else:
-      doorgaan = False
+    printtop()
+    printregel('nog een woordje? y/n')
+    printbottom()
+    doorgaan = input()
 
-def selecteereenwoordenlijst():
+def selecteereenwoordenlijst(geselecteerdelijst):
   collectlijst = []
   leegscherm()
   lijstvanwoordlijsten = open('lijstvanwoordlijsten')
@@ -81,8 +88,16 @@ def selecteereenwoordenlijst():
     printregel("")
     loopcount += 1
     collectlijst.append(line.strip("\n "))
-  printbottom()
-  geselecteerdelijst = collectlijst[int(input('').strip('\n '))]
+  if loopcount == 0:
+    leegscherm()
+    printtop()
+    printregel("Oei, Het ziet er naar uit dat ")
+    printregel("u nog geen lijsten heeft aangemaakt :(")
+    printbottom()
+    time.sleep(3)
+  else:
+    printbottom()
+    geselecteerdelijst = collectlijst[int(input('').strip('\n '))]
   return geselecteerdelijst
 
 def woordentoevoegenaaneenwoordenlijst(geselecteerdelijst):
@@ -97,21 +112,25 @@ def woordentoevoegenaaneenwoordenlijst(geselecteerdelijst):
     printbottom()
     doorgaan = False
     time.sleep(3)
-  while doorgaan:
+  while doorgaan != "n":
     f = open(geselecteerdelijst, "a")
     leegscherm()
-    print(geselecteerdelijst)
     printtop()
-    woordje = input(printregel('wat is het woordje dat je wil toevoegen'))
-    betekenis = input(printregel('wat is de betekenis die je wil toevoegen'))
+    printregel('wat is het woordje: ')
     printbottom()
+    woordje = input("")
+    printtop()
+    printregel('wat is de betekenis: ')
+    printbottom()
+    betekenis = input("")
     f.write('\n')
     f.write(woordje + " - " + betekenis)
     f.close()
-    if input('nog een woordje? Y/N') == "N" or "n":
-      doorgaan = False
-    else:
-      doorgaan = True
+    printtop()
+    printregel('nog een woordje? y/n')
+    printbottom()
+    doorgaan = input('')
+
 
 def woordenlijstenoverhoren(geselecteerdelijst):
   f = ""
@@ -154,21 +173,19 @@ def woordenlijstenoverhoren(geselecteerdelijst):
 
 
     f.close()
-doorgaan = True
-while doorgaan:
+homevraag = "0"
+while homevraag != "5":
   leegscherm()
   maine()
   homevraag = input('')
   if homevraag == '1':
     nieuwewoordenlijstmaken()
   if homevraag == '2':
-    geselecteerdelijst = selecteereenwoordenlijst()
+    geselecteerdelijst = selecteereenwoordenlijst(geselecteerdelijst)
   if homevraag == '3':
     woordentoevoegenaaneenwoordenlijst(geselecteerdelijst)
   if homevraag == '4':
     woordenlijstenoverhoren(geselecteerdelijst)
-  if homevraag == '5':
-    doorgaan = False
 leegscherm()
 printtop()
 printregel('eindopdracht gemaakt door Zeno Smit :)')
