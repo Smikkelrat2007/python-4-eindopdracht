@@ -13,9 +13,14 @@ def print_bottom():
   print("=" * lenscherm)
 
 def leegscherm():
-  os.system('cls||clear')
+  os.system('clear')
 
-def maine():
+def print_mooi_uit(input):
+  print_top()
+  print_regel(input)
+  print_bottom()
+
+def menu():
   print_top()
   print_regel("1. nieuwe woordenlijst maken")
   print_regel("2. selecteer een lijst")
@@ -26,7 +31,6 @@ def maine():
 
 def nieuwe_woordenlijst_maken():
   leegscherm()
-  doorgaan = True
   print_top()
   print_regel("hoe moet je lijst heten??? (")
   print_regel("gebruik wel een andere naam dan")
@@ -40,35 +44,26 @@ def nieuwe_woordenlijst_maken():
   lijst_van_woordlijsten.close()
   leegscherm()
   f = open(naamlijst, "a")
-  print_top()
-  print_regel('wat is het woordje: ')
-  print_bottom()
+  print_mooi_uit('wat is het woordje: ')
   woordje = input("")
-  print_top()
-  print_regel('wat is de betekenis: ')
-  print_bottom()
+  print_mooi_uit('wat is de betekenis: ')
   betekenis = input("")
   f.write(woordje + " - " + betekenis)
   f.close()
-  doorgaan = input('nog een woordje? y/n')
-  while doorgaan != "n":
+  print_mooi_uit("nog een woordje? y/n")
+  while (doorgaan := input('')) != "n":
     leegscherm()
     f = open(naamlijst, "a")
-    print_top()
-    print_regel('wat is het woordje: ')
-    print_bottom()
+    print_mooi_uit("wat is het woordje: ")
     woordje = input("")
-    print_top()
-    print_regel('wat is de betekenis: ')
-    print_bottom()
+    print_mooi_uit("wat is de betekenis: ")
     betekenis = input("")
+
+    print_mooi_uit("nog een woordje? y/n")
+
     f.write("\n")
     f.write(woordje + " - " + betekenis)
     f.close()
-    print_top()
-    print_regel('nog een woordje? y/n')
-    print_bottom()
-    doorgaan = input()
 
 def selecteer_een_woordenlijst(geselecteerdelijst):
   collectlijst = []
@@ -102,33 +97,26 @@ def woorden_toevoegen_aan_een_woordenlijst(geselecteerdelijst):
 
   leegscherm()
 
-  doorgaan = True
+
   if geselecteerdelijst == "":
     print_top()
     print_regel('je moet wel een lijst geselecteerd hebben ')
     print_regel('om een woordenlijst te bewerken')
     print_bottom()
-    doorgaan = False
+    doorgaan2 = "n"
     time.sleep(3)
-  while doorgaan != "n":
-    f = open(geselecteerdelijst, "a")
-    leegscherm()
-    print_top()
-    print_regel('wat is het woordje: ')
-    print_bottom()
-    woordje = input("")
-    print_top()
-    print_regel('wat is de betekenis: ')
-    print_bottom()
-    betekenis = input("")
-    f.write('\n')
-    f.write(woordje + " - " + betekenis)
-    f.close()
-    print_top()
-    print_regel('nog een woordje? y/n')
-    print_bottom()
-    doorgaan = input('')
-
+  else:
+    print_mooi_uit('wil je beginnen? y/n')
+    while (doorgaan2 := input("")) != "n":
+      f = open(geselecteerdelijst, "a")
+      leegscherm()
+      print_mooi_uit("wat is het woordje: ")
+      woordje = input("")
+      print_mooi_uit("wat is de betekenis: ")
+      betekenis = input("")
+      f.write('\n')
+      f.write(woordje + " - " + betekenis)
+      f.close()
 
 def woordenlijsten_overhoren(geselecteerdelijst):
   f = ""
@@ -143,10 +131,7 @@ def woordenlijsten_overhoren(geselecteerdelijst):
     loop = "n"
   while loop != "n":
     leegscherm()
-    print_top()
-    print_regel("we gaan beginnen met de lijst overhoren")
-    print_bottom()
-    print_top()
+    print_mooi_uit("we gaan beginnen met de lijst overhoren")
     f = open(geselecteerdelijst)
     bestandsdata = f.read().split("\n")
     for i in range(len(bestandsdata)):
@@ -155,38 +140,32 @@ def woordenlijsten_overhoren(geselecteerdelijst):
       for i in range(2):
         bestandsdatawoord = split[0]
         bestandsdatabetekenis = split[1]
-      print_top()
-      print_regel("wat betekent: "+ bestandsdatawoord)
-      print_bottom()
+      print_mooi_uit((print_ff := "wat betekent: "+ bestandsdatawoord))
       g = input()
       if g == bestandsdatabetekenis:
         goedfout = 'goed'
       else:
         goedfout = 'fout'
-      print_top()
-      print('dat was', goedfout)
-      print_bottom()
-
+      print_mooi_uit((print_ff := 'dat was'+ goedfout))
     if input('wil je het nog een keer doen? y/n') == 'n':
       loop = "n"
-
-
-
     f.close()
-homevraag = "0"
-while homevraag != "5":
-  leegscherm()
-  maine()
-  homevraag = input('')
-  if homevraag == '1':
-    nieuwe_woordenlijst_maken()
-  if homevraag == '2':
-    geselecteerdelijst = selecteer_een_woordenlijst(geselecteerdelijst)
-  if homevraag == '3':
-    woorden_toevoegen_aan_een_woordenlijst(geselecteerdelijst)
-  if homevraag == '4':
-    woordenlijsten_overhoren(geselecteerdelijst)
-leegscherm()
+def main(geselecteerdelijst):
+  menu()
+  while (homevraag := input("")) != "5":
+    leegscherm()
+    if homevraag == '1':
+      nieuwe_woordenlijst_maken()
+    if homevraag == '2':
+      geselecteerdelijst = selecteer_een_woordenlijst(geselecteerdelijst)
+    if homevraag == '3':
+      woorden_toevoegen_aan_een_woordenlijst(geselecteerdelijst)
+    if homevraag == '4':
+      woordenlijsten_overhoren(geselecteerdelijst)
+    leegscherm()
+    menu()
+
+main(geselecteerdelijst)
 print_top()
 print_regel('eindopdracht gemaakt door Zeno Smit :)')
 print_regel('goedendag')
